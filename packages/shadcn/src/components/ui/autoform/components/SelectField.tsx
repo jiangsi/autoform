@@ -4,7 +4,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "~/components/ui/select";
 import { AutoFormFieldProps } from "@autoform/react";
 import React from "react";
 
@@ -14,28 +14,27 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
   error,
   id,
 }) => {
-  const { key, ...props } = inputProps;
+  const fieldName = id || field.key;
 
   return (
     <Select
-      {...props}
+      defaultValue={inputProps.value}
       onValueChange={(value) => {
-        const syntheticEvent = {
+        const event = {
           target: {
             value,
-            name: field.key,
+            name: fieldName,
           },
         } as React.ChangeEvent<HTMLInputElement>;
-        props.onChange(syntheticEvent);
+        inputProps.onChange(event);
       }}
-      defaultValue={field.default}
     >
       <SelectTrigger id={id} className={error ? "border-destructive" : ""}>
-        <SelectValue placeholder="Select an option" />
+        <SelectValue placeholder="select one option" />
       </SelectTrigger>
       <SelectContent>
-        {(field.options || []).map(([key, label]) => (
-          <SelectItem key={key} value={key}>
+        {(field.options || []).map(([value, label]) => (
+          <SelectItem key={value} value={value}>
             {label}
           </SelectItem>
         ))}
